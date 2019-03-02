@@ -24,7 +24,8 @@ const USER = new GraphQLObjectType({
         questions : {
             type : new GraphQLList(QUESTION),
             resolve(parent , args){
-                return _.filter(questions , {user_id : parent.id})
+                //return _.filter(questions , {user_id : parent.id})
+                return QuestionModel.find({user_id : parent.id});
             }
         }   
     })
@@ -40,7 +41,8 @@ const QUESTION = new GraphQLObjectType({
             type : USER , 
             resolve(parent , args){
                 console.log(parent)
-                return _.find(users , {id : parent.user_id})
+                //return _.find(users , {id : parent.user_id})
+                return UserModel.findById(parent.id);
             }
         }
     })
@@ -54,13 +56,15 @@ const RootQuery = new GraphQLObjectType({
             args : {id : {type : GraphQLID}},
             resolve(parent , args){
                 // code to fetch db
-                return _.find(users , {id : args.id})
+                //return _.find(users , {id : args.id})
+                UserModel.findById(args.id);
             }
         } ,
         users : {
             type : new GraphQLList(USER),
             resolve(parent , args){
-                return users
+                //return users
+                return UserModel.find({})
             }
         } ,
         question: {
@@ -68,13 +72,15 @@ const RootQuery = new GraphQLObjectType({
             args: { id: { type: GraphQLID } },
             resolve(parent, args) {
                 // code to fetch db
-                return _.find(questions, { id: args.id })
+                //return _.find(questions, { id: args.id })
+                QuestionModel.findById(args.id)
             }
         },
         questions : {
             type : new GraphQLList(QUESTION) , 
             resolve(parent , args){
-                return questions
+                //return questions
+                return QuestionModel.find({})
             }
         }
     }
@@ -118,4 +124,4 @@ const Mutation = new GraphQLObjectType({ // to add , delete , edit we use mutati
 module.exports = new GraphQLSchema({
     query : RootQuery,
     mutation : Mutation
-})
+}) 

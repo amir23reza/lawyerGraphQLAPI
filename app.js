@@ -2,12 +2,14 @@ const express = require('express');
 const GraphQLHTTP = require('express-graphql');
 const bodyParser = require("body-parser");
 const Mongoose = require("mongoose");
+const cors = require('cors');
 const schema = require('./schema/schema');
 
 Mongoose.connect("mongodb://localhost:27017/lawyer", { useNewUrlParser: true });
 Mongoose.Promise = global.Promise;
 
 const app = express();
+app.use(cors()); // to solve allow cross-origin access problem.
 app.use(bodyParser.json())
 app.use('/graphQL',GraphQLHTTP({
     schema,
